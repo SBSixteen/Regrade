@@ -1,0 +1,58 @@
+def solveMDP(probs, mR, s1Reward, s4Reward):
+
+    #all equal 0
+    x1 = 0
+    y1 = 0
+    x2 = 0
+    y2 = 0
+
+    #all equal 0
+    w = 0
+    x = 0
+    y = 0
+    z = 0
+
+    while True:
+
+        x1 = probs[0] * (mR + s4Reward) + (1 - probs[0]) * (mR + max(x2, y2));
+        y1 = (1 - probs[1]) * (mR + s4Reward) + probs[1] * (mR + max(x2, y2));
+        x2 = (1 - probs[0]) * (mR + s1Reward) + probs[0] * (mR + max(x1, y1));
+        y2 = probs[1] * (mR + s1Reward) + (1 - probs[1]) * (mR + max(x1, y1));
+
+        if x1 - w < 0.00001 and y1 - x < 0.00001 and x2 - y < 0.00001 and y2 - z < 0.00001:
+            break
+
+        w = x1
+        x = y1
+        y = x2
+        z = y2
+
+    b = [x2, y2, x1, y1]
+    for x in range(0, 4):
+        b[x] = round(b[x], 6);
+
+    return b;
+
+
+#print(solveMDP([0.9, 0.9], -0.1, -1, 1))
+
+
+def solveGD(r, x, e):
+
+    t = x
+    a = 0
+
+    while True:
+
+        x = x - r * (4 * pow(x, 3) + 9 * pow(x, 2) - 40 * x + 1)
+        a = a + 1
+
+        if x - t < e:
+            break
+        t = x
+
+    b = [round(x, 6), a]
+    return b
+
+
+#print(solveGD(0.0001, -7, 0.0001))
